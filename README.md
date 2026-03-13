@@ -72,3 +72,8 @@ g++ -std=c++17 -O2 -o benchmark main.cpp
 ```
 
 Enter the number of tests when prompted.
+
+## Authors
+Stoica Antonia — treap implementation, main benchmark runner
+Filote Ionuț — input generators, skip list implementation
+Pîrvulescu Gabriela — red-black tree implementation
