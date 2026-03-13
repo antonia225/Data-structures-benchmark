@@ -1,1 +1,8 @@
+# Output files
+*.csv
+
+# Build files and directories
+main
+.vscode
+*.dSYM
 .DS_Store
