@@ -1,8 +1,8 @@
 // headings
 #include "generator.hpp"
-#include "treaps.hpp"
-#include "skip_lists.hpp"
-#include "redblack.hpp"
+#include "ds/treaps.hpp"
+#include "ds/skip_lists.hpp"
+#include "ds/redblack.hpp"
 
 #include <fstream>
 #include <chrono>
