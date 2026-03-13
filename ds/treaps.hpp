@@ -16,9 +16,9 @@ struct Treap
 
 using ptr_Treap = shared_ptr<Treap>;
 
-// Split treap în două treap-uri
-// l conține toate elementele < key
-// r conține toate elementele ≥ key
+// Split treap into two treaps
+// l contains all elements < key
+// r contains all elements >= key
 void split(ptr_Treap t, long long key, ptr_Treap &l, ptr_Treap &r)
 {
     if (!t)
@@ -36,9 +36,9 @@ void split(ptr_Treap t, long long key, ptr_Treap &l, ptr_Treap &r)
     }
 }
 
-// Combină două treap-uri presupunând că ambele sunt deja sortate
-// și că nu există elemente duplicate
-// Merge două treap-uri: l conține < r, r conține ≥ l
+// Merge two treaps assuming both are already sorted
+// and that there are no duplicate elements
+// Merge two treaps: l contains < r, r contains >= l
 ptr_Treap merge(ptr_Treap l, ptr_Treap r)
 {
     if (!l || !r)
@@ -57,8 +57,8 @@ ptr_Treap merge(ptr_Treap l, ptr_Treap r)
     }
 }
 
-// Verifică dacă un element există în treap
-// Returnează true dacă key există în treap, false altfel
+// Check if an element exists in the treap
+// Returns true if key exists in the treap, false otherwise
 bool find(ptr_Treap t, long long key)
 {
     while (t)
@@ -70,10 +70,10 @@ bool find(ptr_Treap t, long long key)
     return false;
 }
 
-// Adaugă un element în treap
-// Returnează treap-ul rezultat
-// Dacă elementul există deja, nu se va adăuga un duplicat
-// și treap-ul va rămâne neschimbat
+// Insert an element into the treap
+// Returns the resulting treap
+// If the element already exists, no duplicate will be added
+// and the treap will remain unchanged
 ptr_Treap insert(ptr_Treap t, long long number)
 {
     ptr_Treap item = make_shared<Treap>(number);
@@ -95,16 +95,16 @@ ptr_Treap insert(ptr_Treap t, long long number)
     return t;
 }
 
-// Șterge un element din treap
-// Returnează treap-ul rezultat
-// Dacă elementul nu există, treap-ul va rămâne neschimbat
+// Delete an element from the treap
+// Returns the resulting treap
+// If the element does not exist, the treap will remain unchanged
 ptr_Treap erase(ptr_Treap t, long long key)
 {
     if (!t)
         return nullptr;
 
-    // Dacă cheia este egală cu cheia curentă, elimină nodul
-    // și combină subarborii stâng și drept
+    // If the key equals the current key, remove the node
+    // and merge the left and right subtrees
     if (t->key == key)
         return merge(t->left, t->right);
 
@@ -117,8 +117,8 @@ ptr_Treap erase(ptr_Treap t, long long key)
     return t;
 }
 
-// Returnează cel mai mare element din treap cu valoarea mai mică sau egală cu key
-long long treap_floor(ptr_Treap t, long long key)
+// Returns the largest element in the treap with value <= key
+long long floor(ptr_Treap t, long long key)
 {
     long long res = LONG_MIN;
     while (t)
@@ -133,8 +133,8 @@ long long treap_floor(ptr_Treap t, long long key)
     return res;
 }
 
-// Returnează cel mai mic element din treap cu valoarea mai mare sau egală cu key
-long long treap_ceil(ptr_Treap t, long long key)
+// Returns the smallest element in the treap with value >= key
+long long ceil(ptr_Treap t, long long key)
 {
     long long res = -1;
     while (t)
@@ -149,27 +149,27 @@ long long treap_ceil(ptr_Treap t, long long key)
     return res;
 }
 
-// Returnează toate elementele din treap care se află în intervalul [x, y]
-// Adaugă elementele în vectorul out
+// Returns all elements in the treap in the range [x, y]
+// Appends elements to the output vector out
 void range(ptr_Treap t, long long x, long long y, vector<long long> &out)
 {
     if (!t)
         return;
 
-    // stanga
+    // left
     if (x < t->key)
         range(t->left, x, y, out);
 
-    // nodul curent
+    // current node
     if (x <= t->key && t->key <= y)
         out.push_back(t->key);
 
-    // dreapta
+    // right
     if (t->key < y)
         range(t->right, x, y, out);
 }
 
-// Reunește două treap-uri
+// Union of two treaps
 ptr_Treap reunion(ptr_Treap a, ptr_Treap b)
 {
     if (!a || !b)
@@ -188,7 +188,7 @@ ptr_Treap reunion(ptr_Treap a, ptr_Treap b)
     return a;
 }
 
-// Afișează câte numere sunt în treap
+// Returns the number of nodes in the treap
 int size(ptr_Treap t)
 {
     if (!t)

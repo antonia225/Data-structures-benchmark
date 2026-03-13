@@ -1,4 +1,4 @@
-// headings
+// headers
 #include "generator.hpp"
 #include "ds/treaps.hpp"
 #include "ds/skip_lists.hpp"
@@ -11,56 +11,56 @@
 using namespace std;
 using namespace chrono;
 
-// fisiere de output
+// output files
 ofstream ftreap("output_treap.csv");
 ofstream fskiplist("output_skiplist.csv");
 ofstream fredblack("output_redblack.csv");
 
 int main()
 {
-    ftreap << "Test, Nr_numere, Operatie, Timp, Rezultat\n";
-    fskiplist << "Test, Nr_numere, Operatie, Timp, Rezultat\n";
-    fredblack << "Test, Nr_numere, Operatie, Timp, Rezultat\n";
+    ftreap << "Test, Num_numbers, Operation, Time, Result\n";
+    fskiplist << "Test, Num_numbers, Operation, Time, Result\n";
+    fredblack << "Test, Num_numbers, Operation, Time, Result\n";
 
-    // numar teste
-    int nr_teste;
-    cout << "Numar teste: ";
-    cin >> nr_teste;
+    // number of tests
+    int num_tests;
+    cout << "Number of tests: ";
+    cin >> num_tests;
 
-    for (int test = 0; test < nr_teste; test++)
+    for (int test = 0; test < num_tests; test++)
     {
-        // numar operatii
-        unsigned int nr_operatii = Generator_Numar(1, 10000);
-        cout << "Test " << test << "\nNumar operatii: " << nr_operatii << endl;
+        // number of operations
+        unsigned int num_operations = Generator_Numar(1, 10000);
+        cout << "Test " << test << "\nNumber of operations: " << num_operations << endl;
 
-        vector<long long> numbers; // vectorul din care se vor lua numerele la operatia de inserare
-        int i = 0;                 // index pentru vectorul de numere
+        vector<long long> numbers; // vector from which numbers are taken for the insert operation
+        int i = 0;                 // index into the numbers vector
 
-        // se creeaza structurile de date
+        // create data structures
         ptr_Treap treap = nullptr;
         SkipList<long long> skiplist;
         Tree redblack;
 
-        if (test < nr_teste / 5)
-            Generator_Numere_Sortate_Crescator<long long>(LONG_MIN, LONG_MAX, 40000, numbers);
-        else if (test < nr_teste * 2 / 5)
-            Generator_Numere_Sortate_Descrescator<long long>(LONG_MIN, LONG_MAX, 40000, numbers);
-        else if (test < nr_teste * 3 / 5)
-            Generator_Numere_Random_Uniform<long long>(LONG_MIN, LONG_MAX, 40000, numbers);
-        else if (test < nr_teste * 4 / 5)
-            Generator_Numere_Random_Gaussian<long long>(LONG_MIN, LONG_MAX, 40000, numbers);
+        if (test < num_tests / 5)
+            Generator_Numere_Sortate_Crescator<long long>(LONG_MIN, LONG_MAX, 40000, numbers); // Sorted ascending
+        else if (test < num_tests * 2 / 5)
+            Generator_Numere_Sortate_Descrescator<long long>(LONG_MIN, LONG_MAX, 40000, numbers); // Sorted descending
+        else if (test < num_tests * 3 / 5)
+            Generator_Numere_Random_Uniform<long long>(LONG_MIN, LONG_MAX, 40000, numbers); // Uniform random
+        else if (test < num_tests * 4 / 5)
+            Generator_Numere_Random_Gaussian<long long>(LONG_MIN, LONG_MAX, 40000, numbers); // Gaussian random
         else
-            Generator_Numere_Random_Inverted_Gaussian<long long>(LONG_MIN, LONG_MAX, 40000, numbers);
+            Generator_Numere_Random_Inverted_Gaussian<long long>(LONG_MIN, LONG_MAX, 40000, numbers); // Inverted Gaussian random
         
-        for (int op = 0; op < nr_operatii; op++)
+        for (int op = 0; op < num_operations; op++)
         {
-            int operatie = Generator_Numar(1, 10);
-            cout << operatie << endl;
+            int operation = Generator_Numar(1, 10);
+            cout << operation << endl;
 
-            // alegem operatia
-            switch (operatie)
+            // choose operation
+            switch (operation)
             {
-            case 1: // inserare
+            case 1: // insert
             case 2:
             case 3:
             case 4:
@@ -72,54 +72,54 @@ int main()
                 insert(treap, number);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop - start);
-                ftreap << test + 1 << ", " << size(treap) << ", " << operatie << ", " << duration.count() << endl;
+                ftreap << test + 1 << ", " << size(treap) << ", " << operation << ", " << duration.count() << endl;
 
                 // skip list
                 start = high_resolution_clock::now();
                 skiplist.insert(number);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operatie << ", " << duration.count() << endl;
+                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operation << ", " << duration.count() << endl;
 
                 // red-black tree
                 start = high_resolution_clock::now();
                 redblack.insert(number);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operatie << ", " << duration.count() << endl;
+                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operation << ", " << duration.count() << endl;
             }
             break;
 
-            case 5: // stergere
+            case 5: // delete
             {
-                long long number = Generator_Numar(LONG_MIN, LONG_MAX);
+                int number = Generator_Numar(LONG_MIN, LONG_MAX);
 
                 // treap
                 auto start = high_resolution_clock::now();
                 treap = erase(treap, number);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop - start);
-                ftreap << test + 1 << ", " << size(treap)  << ", " << operatie << ", " << duration.count() << endl;
+                ftreap << test + 1 << ", " << size(treap)  << ", " << operation << ", " << duration.count() << endl;
 
                 // skip list
                 start = high_resolution_clock::now();
                 skiplist.delete_value(number);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operatie << ", " << duration.count() << endl;
+                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operation << ", " << duration.count() << endl;
 
                 // red-black tree
                 start = high_resolution_clock::now();
                 redblack.deleteRBNode(number);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operatie << ", " << duration.count() << endl;
+                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operation << ", " << duration.count() << endl;
             }
             break;
 
-            case 6: // cautare
+            case 6: // search
             {
-                long long number = Generator_Numar(LONG_MIN, LONG_MAX);
+                int number = Generator_Numar(LONG_MIN, LONG_MAX);
 
                 // treap
                 auto start = high_resolution_clock::now();
@@ -127,9 +127,9 @@ int main()
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop - start);
                 if (result1 == 0)
-                    ftreap << test + 1 << ", " << size(treap)  << ", " << operatie << ", " << duration.count() << ", not found" << endl;
+                    ftreap << test + 1 << ", " << size(treap)  << ", " << operation << ", " << duration.count() << ", not found" << endl;
                 else
-                    ftreap << test + 1 << ", " << size(treap)  << ", " << operatie << ", " << duration.count() << ", found" << endl;
+                    ftreap << test + 1 << ", " << size(treap)  << ", " << operation << ", " << duration.count() << ", found" << endl;
 
                 // skip list
                 start = high_resolution_clock::now();
@@ -137,9 +137,9 @@ int main()
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
                 if (result2 == nullptr)
-                    fskiplist << test + 1 << ", " << skiplist.size() << ", " << operatie << ", " << duration.count() << ", not found" << endl;
+                    fskiplist << test + 1 << ", " << skiplist.size() << ", " << operation << ", " << duration.count() << ", not found" << endl;
                 else
-                    fskiplist << test + 1 << ", " << skiplist.size() << ", " << operatie << ", " << duration.count() << ", found" << endl;
+                    fskiplist << test + 1 << ", " << skiplist.size() << ", " << operation << ", " << duration.count() << ", found" << endl;
 
                 // red-black tree
                 start = high_resolution_clock::now();
@@ -147,16 +147,16 @@ int main()
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
                 if (result3 == 0)
-                    fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operatie << ", " << duration.count() << ", not found" << endl;
+                    fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operation << ", " << duration.count() << ", not found" << endl;
                 else
-                    fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operatie << ", " << duration.count() << ", found" << endl;
+                    fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operation << ", " << duration.count() << ", found" << endl;
             }
             break;
 
-            case 7: // interval
+            case 7: // range
             {
-                long long x = Generator_Numar(LONG_MIN, LONG_MAX);
-                long long y = Generator_Numar(LONG_MIN, LONG_MAX);
+                int x = Generator_Numar(LONG_MIN, LONG_MAX);
+                int y = Generator_Numar(LONG_MIN, LONG_MAX);
 
                 // treap
                 vector<long long> out;
@@ -164,14 +164,14 @@ int main()
                 range(treap, x, y, out);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop - start);
-                ftreap << test + 1 << ", " << size(treap)  << ", " << operatie << ", " << duration.count() << endl;
+                ftreap << test + 1 << ", " << size(treap)  << ", " << operation << ", " << duration.count() << endl;
 
                 // skip list
                 start = high_resolution_clock::now();
                 auto result = skiplist.Interval(x, y);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operatie << ", " << duration.count() << endl;
+                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operation << ", " << duration.count() << endl;
 
                 // red-black tree
                 out.clear();
@@ -179,94 +179,94 @@ int main()
                 redblack.rangeQuery(x, y, out);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operatie << ", " << duration.count() << endl;
+                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operation << ", " << duration.count() << endl;
             }
             break;
 
-            case 8: // succesor
+            case 8: // successor
             {
-                long long number = Generator_Numar(LONG_MIN, LONG_MAX);
+                int number = Generator_Numar(LONG_MIN, LONG_MAX);
 
                 // treap
                 auto start = high_resolution_clock::now();
-                auto result1 = treap_ceil(treap, number);
+                auto result1 = ceil(treap, number);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop - start);
-                ftreap << test + 1 << ", " << size(treap)  << ", " << operatie << "," << duration.count() << "," << result1 << endl;
+                ftreap << test + 1 << ", " << size(treap)  << ", " << operation << "," << duration.count() << "," << result1 << endl;
 
                 // skip list
                 start = high_resolution_clock::now();
                 auto result2 = skiplist.lowest_greater_than(number);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operatie << ", " << duration.count() << "," << result2 << endl;
+                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operation << ", " << duration.count() << "," << result2 << endl;
 
                 // red-black tree
                 start = high_resolution_clock::now();
                 auto result3 = redblack.successor(number);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operatie << ", " << duration.count() << "," << result3 << endl;
+                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operation << ", " << duration.count() << "," << result3 << endl;
             }
             break;
 
-            case 9: // predecesor
+            case 9: // predecessor
             {
-                long long number = Generator_Numar(LONG_MIN, LONG_MAX);
+                int number = Generator_Numar(LONG_MIN, LONG_MAX);
 
                 // treap
                 auto start = high_resolution_clock::now();
-                auto result1 = treap_floor(treap, number);
+                auto result1 = floor(treap, number);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop - start);
-                ftreap << test + 1 << ", " << size(treap)  << ", " << operatie << ", " << duration.count() << "," << result1 << endl;
+                ftreap << test + 1 << ", " << size(treap)  << ", " << operation << ", " << duration.count() << "," << result1 << endl;
 
                 // skip list
                 start = high_resolution_clock::now();
                 auto result2 = skiplist.largest_lower_by(number);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operatie << ", " << duration.count() << "," << result2 << endl;
+                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operation << ", " << duration.count() << "," << result2 << endl;
 
                 // red-black tree
                 start = high_resolution_clock::now();
                 auto result3 = redblack.predecessor(number);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operatie << ", " << duration.count() << "," << result3 << endl;
+                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operation << ", " << duration.count() << "," << result3 << endl;
             }
             break;
 
-            case 10: // reuniune
+            case 10: // union
             {
-                int nr_numere_union = Generator_Numar(1, 50000);
+                int num_numbers = Generator_Numar(1, 50000);
 
                 // treap
                 ptr_Treap treap2;
-                treap2 = generare_random_treap(nr_numere_union);
+                treap2 = generare_random_treap(num_numbers);
                 auto start = high_resolution_clock::now();
                 treap = reunion(treap, treap2);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<nanoseconds>(stop - start);
-                ftreap << test + 1 << ", " << size(treap) << ", " << operatie << ", " << duration.count() << endl;
+                ftreap << test + 1 << ", " << size(treap) << ", " << operation << ", " << duration.count() << endl;
 
                 // skip list
                 SkipList<long long> skiplist2;
-                skiplist2 = skiplist2.generare_random_skiplist(nr_numere_union);
+                skiplist2 = skiplist2.generare_random_skiplist(num_numbers);
                 start = high_resolution_clock::now();
                 skiplist = skiplist.union_list(skiplist2);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operatie << ", " << duration.count() << endl;
+                fskiplist << test + 1 << ", " << skiplist.size() << ", " << operation << ", " << duration.count() << endl;
 
                 // red-black tree
                 Tree redblack2;
-                redblack2.generateRandomRBTree(nr_numere_union);
+                redblack2.generateRandomRBTree(num_numbers);
                 start = high_resolution_clock::now();
                 redblack.unionWith(redblack2);
                 stop = high_resolution_clock::now();
                 duration = duration_cast<nanoseconds>(stop - start);
-                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operatie << ", " << duration.count() << endl;
+                fredblack << test + 1 << ", " << redblack.countNodes() << ", " << operation << ", " << duration.count() << endl;
             }
             break;
             }
